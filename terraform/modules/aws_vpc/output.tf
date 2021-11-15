@@ -11,7 +11,7 @@ output "private_subnets" {
 }
 
 output "igw_id" {
-  value = module.aws_internet_gateway.igw_id
+  value = aws_internet_gateway.igw.id
 }
 
 output "public_routes" {

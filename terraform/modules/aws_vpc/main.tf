@@ -1,4 +1,6 @@
-## module: aws_vpc
+##################################
+# VPC Module
+##################################
 
 data "aws_availability_zones" "available_az" {
 }
@@ -23,15 +25,15 @@ resource "aws_vpc" "vpc" {
   )
 }
 
-module "aws_internet_gateway" {
-  source = "../aws_igw/"
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
   tags = merge(
     var.tags,
     {
       "Name" = "${var.vpc_name}-igw"
     },
   )
-  vpc_id = aws_vpc.vpc.id
 }
 
 resource "aws_subnet" "public_subnets" {
@@ -68,7 +70,7 @@ resource "aws_route_table" "public_route" {
   tags = merge(
     var.tags,
     {
-      "Name" = "${var.vpc_name}-public-rt-${count.index + 1}"
+      "Name" = "${var.vpc_name}-public-rt-az-${count.index + 1}"
     },
   )
 }
@@ -77,7 +79,7 @@ resource "aws_route" "public_igw" {
   count                  = var.az_count * (var.enable_public_subnets == "true" ? 1 : 0)
   route_table_id         = element(aws_route_table.public_route.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = module.aws_internet_gateway.igw_id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 resource "aws_route_table_association" "public_route_assoc" {
@@ -92,7 +94,7 @@ resource "aws_route_table" "private_route" {
   tags = merge(
     var.tags,
     {
-      "Name" = "${var.vpc_name}-private-rt-${count.index + 1}"
+      "Name" = "${var.vpc_name}-private-rt-az-${count.index + 1}"
     },
   )
 }
