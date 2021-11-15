@@ -26,3 +26,7 @@ output "vpc_cidr" {
   value = module.vpc.vpc_cidr
 }
 
+output "ecr_repo" {
+  value = module.ecr.ecr_repo
+}
+
