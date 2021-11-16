@@ -104,3 +104,33 @@ resource "aws_route_table_association" "private_route_assoc" {
   subnet_id      = element(aws_subnet.private_subnets.*.id, count.index)
   route_table_id = element(aws_route_table.private_route.*.id, count.index)
 }
+
+resource "aws_eip" "eip" {
+  count = var.az_count * (var.enable_public_subnets == "true" ? 1 : 0)
+  vpc   = true
+  tags = merge(
+    var.tags,
+    {
+      "Name" = var.vpc_name
+    },
+  )
+}
+
+resource "aws_nat_gateway" "ngw" {
+  count         = var.az_count * (var.enable_public_subnets == "true" ? 1 : 0)
+  subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
+  allocation_id = element(aws_eip.eip.*.id, count.index)
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.vpc_name}-ngw-${count.index + 1}"
+    },
+  )
+}
+
+resource "aws_route" "private_nat_gateway" {
+  count                  = var.az_count * (var.enable_public_subnets == "true" ? 1 : 0)
+  route_table_id         = element(aws_route_table.private_route.*.id, count.index)
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = element(aws_nat_gateway.ngw.*.id, count.index)
+}
