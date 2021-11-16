@@ -1,6 +1,10 @@
 
 data "aws_caller_identity" "current" {}
 
+locals {
+ image_url = "${format("%s:%s",module.ecr.ecr_repo_url,"latest")}" 
+}
+
 module "vpc" {
   source   = "../modules/aws_vpc/"
   vpc_name = var.vpc_name
@@ -20,6 +24,8 @@ module "alb" {
   alb_name = var.alb_name
   health_check_path = var.health_check_path
   alb_sg_name = var.alb_sg_name
+  alb_port = var.alb_port
+  container_port = var.container_port
   tags     = var.tags
 }
 
@@ -37,7 +43,19 @@ module "ecs" {
   source   = "../modules/aws_ecs/"
   ecs_cluster_name = var.ecs_cluster_name
   tags     = var.tags
+  task_defination_name = var.task_defination_name
+  task_cpu = var.task_cpu
+  task_memory = var.task_memory
+  image_url = local.image_url
+  container_name = var.container_name
+  container_memory = var.container_memory
+  region = var.region
+  vpc_id = module.vpc.vpc_id
+  container_port = var.container_port
+  alb_target_group_arn = module.alb.alb_target_group_arn
+  private_subnets = module.vpc.private_subnets
+  ecs_service_desired_count = var.ecs_service_desired_count
+  alb_sg_id = module.alb.alb_security_group.id
+  ecs_service_sg_name = var.ecs_service_sg_name
+  ecs_service_name = var.ecs_service_name
 }
-
-
-

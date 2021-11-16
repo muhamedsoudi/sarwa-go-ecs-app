@@ -26,7 +26,14 @@ output "vpc_cidr" {
   value = module.vpc.vpc_cidr
 }
 
-output "ecr_repo" {
-  value = module.ecr.ecr_repo
+output "ecr_repo_url" {
+  value = module.ecr.ecr_repo_url
 }
 
+output "image_url" {
+  value = "${format("%s:%s",module.ecr.ecr_repo_url,"latest")}"
+}
+
+output "alb_dns_name" {
+  value = "${format("%s:%s",module.alb.alb_dns_name,var.alb_port)}"
+}

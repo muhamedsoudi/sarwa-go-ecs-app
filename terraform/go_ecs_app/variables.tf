@@ -79,3 +79,49 @@ variable "ecr_repo_name" {
   description = "ECR Repository Name"
   default     = "go-app-repo"
 }
+
+variable "task_defination_name" {
+  type        = string
+  description = "ECR Repository Name"
+  default     = "go-app-task"
+}
+variable "task_cpu" { 
+  description = "TASK CPU"
+  default     = 512
+}
+variable "task_memory" {
+  description = "TASK Memory"
+  default     = 1024
+}
+
+variable "container_name" {
+  type        = string
+  description = "Container Name"
+  default     = "go-app-container"
+}
+
+variable "container_memory" {
+  description = "Container Memory"
+  default     = 256
+}
+
+variable "ecs_service_sg_name" {
+  description = "Name of the ECS-Service ASG Security Group"
+  default     = "ecs-go-app-service-sg"
+}
+
+variable "container_port" {
+  default     = 8000
+}
+variable "alb_port" {
+  default     = 8001
+}
+
+variable "ecs_service_name" {
+  description = "Name of the ECS-Service"
+  default     = "ecs-go-app-service"
+}
+
+variable "ecs_service_desired_count" {
+  default     = 2
+}
