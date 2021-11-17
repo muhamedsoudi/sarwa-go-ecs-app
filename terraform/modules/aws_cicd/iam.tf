@@ -34,7 +34,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
             "ecr:PutImage",
             "ecr:UploadLayerPart"
          ],
-         "Resource":"${var.ecr_repo_arn}",
+         "Resource":"*",
          "Effect":"Allow"
       },
       {
@@ -137,18 +137,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Effect": "Allow",
       "Action": "ecs:*",
       "Resource": "*"
-    },
-    {
-      "Effect":"Allow",
-      "Action":[
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:CompleteLayerUpload",
-        "ecr:GetAuthorizationToken",
-        "ecr:InitiateLayerUpload",
-        "ecr:PutImage",
-        "ecr:UploadLayerPart"
-      ],
-      "Resource":"${var.ecr_repo_arn}"
     }    
   ]
 }
