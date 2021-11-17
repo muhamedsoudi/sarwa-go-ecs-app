@@ -75,6 +75,16 @@ To resolve it, you have to reconnect again to the github repo and set the reposi
 ![Github-Token Issue](./issues/github-token.PNG)
 
 
+## Future Iteration
+
+* Create a Multi-AWS account for each environment (e.g DEV, TEST, QA, and PROD) for better isolation and cost monitoring. 
+* Enhance the pipeline by adding more stages such as the following:
+    1. Testing stage to Test the code before deploying.
+    2. Notifications to send email/SMS/slack notifications upon success/failure.
+* Use Github Connection V2 instead of V1 as recommended by AWS.
+* Cache the Docker image layers to amazon s3 during building the image for better performance.
+* Get rid of the NAT gateways by deploying the ECS services on the public subnets (based on application need) or using VPC PrivateLink Endpoint.
+
 ## References
 * [Infrastructure as a code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
 * [Terraform](https://www.terraform.io/)
