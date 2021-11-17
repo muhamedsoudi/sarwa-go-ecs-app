@@ -15,6 +15,10 @@ variable "ecr_repo_arn" {
 variable "ecr_repo_url" {
 }
 
+variable "container_name" {
+}
+
+
 variable "github_branch_name" {
 }
 

@@ -1,23 +1,12 @@
-provider "github" {
-  token = var.webhook_secret
-  owner = var.github_username
-}
 data "local_file" "buildspec" {
     filename = "${path.module}/templates/buildspec.yml"
 }
 
 # A shared secret between GitHub and AWS that allows AWS
 # CodePipeline to authenticate the request came from GitHub.
-# Would probably be better to pull this from the environment
-# or something like SSM Parameter Store.
 locals {
   webhook_secret = var.webhook_secret 
 }
-
-# resource "aws_codestarconnections_connection" "githubV2_connection" {
-#   name          = "github_codestar_connection"
-#   provider_type = "GitHub"
-# }
 
 resource "aws_cloudwatch_log_group" "codebuild-log-group" {
   name = "${var.codebuild_project_name}-cw-LogGroup"
@@ -49,8 +38,6 @@ resource "aws_codebuild_project" "docker_image_codebuild" {
     type                = "CODEPIPELINE"
   }
   artifacts {
-    encryption_disabled    = true
-    packaging              = "NONE"
     type                   = "CODEPIPELINE"
   }
 
@@ -72,6 +59,10 @@ resource "aws_codebuild_project" "docker_image_codebuild" {
       name  = "AWS_DEFAULT_REGION"
       value = var.region
       }
+    environment_variable{
+      name  = "CONTAINER_NAME"
+      value = var.container_name
+      }
   }
 
   logs_config {
@@ -80,21 +71,14 @@ resource "aws_codebuild_project" "docker_image_codebuild" {
       group_name  = aws_cloudwatch_log_group.codebuild-log-group.name
     }
   }
-
-#   vpc_config {
-#     vpc_id = var.vpc_id
-#     subnets = var.private_subnets
-#     security_group_ids = [var.default_sg_id]
-#   }
 }
-
 
 resource "aws_codepipeline" "ecs-codepipeline" {
   name     = var.codepipeline_name
   role_arn = aws_iam_role.codepipeline_Service_role.arn
 
   artifact_store {
-    location = aws_s3_bucket.codepipeline_artifacts_bucket.bucket
+    location = aws_s3_bucket.codepipeline_artifacts_bucket.id
     type     = "S3"
   }
 
@@ -105,16 +89,8 @@ resource "aws_codepipeline" "ecs-codepipeline" {
       category         = "Source"
       owner            = "ThirdParty"
       provider         = "GitHub"
-      # provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["SourceArtifact"]
-
-      # configuration = {
-      #   ConnectionArn    = aws_codestarconnections_connection.githubV2_connection.arn
-      #   FullRepositoryId = "${var.github_username}/${var.github_repo_name}"
-      #   BranchName       = var.github_branch_name
-      # }
-
       configuration = {
         Owner  = var.github_username
         Repo   = var.github_repo_name
@@ -134,7 +110,6 @@ resource "aws_codepipeline" "ecs-codepipeline" {
       input_artifacts  = ["SourceArtifact"]
       output_artifacts = ["BuildArtifact"]
       version          = "1"
-
       configuration = {
         ProjectName = aws_codebuild_project.docker_image_codebuild.name
       }

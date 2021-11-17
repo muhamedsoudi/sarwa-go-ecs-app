@@ -61,7 +61,7 @@ module "ecs" {
 }
 
 module "codepipeline" {
-  source   = "./modules/aws_cicd/"
+  source   = "./modules/aws_cicd_pipeline/"
   ecs_cluster_name = var.ecs_cluster_name
   region = var.region
   aws_account_no = data.aws_caller_identity.current.account_id
@@ -71,6 +71,7 @@ module "codepipeline" {
   codebuild_project_name = var.codebuild_project_name
   ecr_repo_arn = module.ecr.ecr_repo_arn
   ecr_repo_url = module.ecr.ecr_repo_url
+  container_name = var.container_name
   github_branch_name = var.github_branch_name
   github_username = var.github_username
   github_repo_name = var.github_repo_name
