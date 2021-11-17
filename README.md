@@ -76,8 +76,8 @@ To resolve it, you have to reconnect again to the github repo and set the reposi
 
 
 ## References
-* IAC
-* Terraform
-* CI/CD Concepts
-* Amazon ECS
-* Amazon ECR
+* [Infrastructure as a code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
+* [Terraform](https://www.terraform.io/)
+* [CI/CD Concepts](https://www.synopsys.com/glossary/what-is-cicd.html)
+* [Amazon ECS](https://aws.amazon.com/ecs/)
+* [Amazon ECR](https://aws.amazon.com/ecr/)
