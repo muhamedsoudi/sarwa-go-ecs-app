@@ -1,6 +1,5 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "role-name"
- 
+  name = "ecs-go-app-task-execution-role"
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",

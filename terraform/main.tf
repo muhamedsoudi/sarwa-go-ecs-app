@@ -6,7 +6,7 @@ locals {
 }
 
 module "vpc" {
-  source   = "../modules/aws_vpc/"
+  source   = "./modules/aws_vpc/"
   vpc_name = var.vpc_name
   vpc_cidr = var.vpc_cidr
   az_count = var.az_count
@@ -18,7 +18,7 @@ module "vpc" {
 }
 
 module "alb" {
-  source   = "../modules/aws_alb/"
+  source   = "./modules/aws_alb/"
   vpc_id = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets
   alb_name = var.alb_name
@@ -31,16 +31,16 @@ module "alb" {
 
 # Create ECR Repository, build and push docker image to it 
 module "ecr" {
-  source = "../modules/aws_ecr/"
+  source = "./modules/aws_ecr/"
   account_no = data.aws_caller_identity.current.account_id
   ecr_repo_name = var.ecr_repo_name
-  dockerfile_dir = "../../"
+  dockerfile_dir = "../"
   region = var.region
   tags     = var.tags
 }
 
 module "ecs" {
-  source   = "../modules/aws_ecs/"
+  source   = "./modules/aws_ecs/"
   ecs_cluster_name = var.ecs_cluster_name
   tags     = var.tags
   task_defination_name = var.task_defination_name
@@ -58,4 +58,22 @@ module "ecs" {
   alb_sg_id = module.alb.alb_security_group.id
   ecs_service_sg_name = var.ecs_service_sg_name
   ecs_service_name = var.ecs_service_name
+}
+
+module "codepipeline" {
+  source   = "./modules/aws_cicd/"
+  ecs_cluster_name = var.ecs_cluster_name
+  region = var.region
+  aws_account_no = data.aws_caller_identity.current.account_id
+  tags   = var.tags
+  codepipeline_name = var.codepipeline_name
+  ecs_service_name = var.ecs_service_name
+  codebuild_project_name = var.codebuild_project_name
+  ecr_repo_arn = module.ecr.ecr_repo_arn
+  ecr_repo_url = module.ecr.ecr_repo_url
+  github_branch_name = var.github_branch_name
+  github_username = var.github_username
+  github_repo_name = var.github_repo_name
+  webhook_secret = var.webhook_secret
+  github_token = var.github_token
 }

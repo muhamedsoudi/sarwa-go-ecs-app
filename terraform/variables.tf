@@ -125,3 +125,38 @@ variable "ecs_service_name" {
 variable "ecs_service_desired_count" {
   default     = 2
 }
+
+
+
+variable "codebuild_project_name" {
+  description = "Name of the Codebuild Project"
+  default     = "ecs-go-app-codebuild"
+}
+
+variable "codepipeline_name" {
+  description = "Codepipeline Name"
+  default = "ecs-go-app-pipeline"
+}
+
+variable "github_branch_name" {
+  description = "Github Source Repository Branch Name"
+  default     = "main"
+}
+
+variable "github_username" {
+  description = "Github Repo Owner"
+  default = "muhamedsoudi"
+}
+
+variable "github_repo_name" {
+  description = "Github Source Repository Name"
+  default     = "sarwa-go-ecs-app"
+}
+
+variable "webhook_secret" {
+  default = "*"
+}
+
+variable "github_token" {
+  default= "*"
+}
