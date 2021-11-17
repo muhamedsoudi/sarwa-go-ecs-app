@@ -92,6 +92,16 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Action": "iam:PassRole",
+      "Resource": "*",
+      "Effect": "Allow",
+      "Condition": {
+        "StringEqualsIfExists": {
+          "iam:PassedToService": ["ecs-tasks.amazonaws.com"]
+        }
+      }
+    },    
+    {
       "Action": [
         "logs:CreateLogGroup",
         "logs:PutLogEvents",
@@ -127,7 +137,19 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Effect": "Allow",
       "Action": "ecs:*",
       "Resource": "*"
-    }         
+    },
+    {
+      "Effect":"Allow",
+      "Action":[
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetAuthorizationToken",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+      ],
+      "Resource":"${var.ecr_repo_arn}"
+    }    
   ]
 }
 EOF
