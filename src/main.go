@@ -9,7 +9,7 @@ import (
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Success!")
+	fmt.Fprintf(w, "Success! V0.1")
 	log.Info().Msg("Endpoint Hit: home")
 }
 
