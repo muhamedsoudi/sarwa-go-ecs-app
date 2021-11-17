@@ -83,7 +83,7 @@ EOF
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name = "ecs-go-app-codepipeline_policy"
-  role = aws_iam_role.codebuild_Service_role.name
+  role = aws_iam_role.codepipeline_Service_role.name
   policy = <<EOF
 {
   "Version": "2012-10-17",
