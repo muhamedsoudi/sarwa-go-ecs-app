@@ -114,8 +114,23 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
             "${aws_s3_bucket.codepipeline_artifacts_bucket.arn}",
             "${aws_s3_bucket.codepipeline_artifacts_bucket.arn}/*"
          ]
-    }    
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild"
+      ],
+      "Resource": "${aws_codebuild_project.docker_image_codebuild.arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "ecs:*",
+      "Resource": "*"
+    }         
   ]
 }
 EOF
 }
+
+
