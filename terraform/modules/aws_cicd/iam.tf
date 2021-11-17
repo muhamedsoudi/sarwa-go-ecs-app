@@ -51,7 +51,10 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "Action":[
           "s3:GetObject",
           "s3:ListBucket",
-          "s3:PutObject"
+          "s3:PutObject",
+          "s3:GetObjectVersion",
+          "s3:GetBucketVersioning",
+          "s3:PutObjectAcl"
         ],
         "Resource":[
             "${aws_s3_bucket.codepipeline_artifacts_bucket.arn}",
@@ -96,7 +99,22 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       ],
       "Resource": "*",
       "Effect": "Allow" 
-    }
+    },
+    {
+        "Effect":"Allow",
+        "Action":[
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:PutObject",
+          "s3:GetObjectVersion",
+          "s3:GetBucketVersioning",
+          "s3:PutObjectAcl"
+        ],
+        "Resource":[
+            "${aws_s3_bucket.codepipeline_artifacts_bucket.arn}",
+            "${aws_s3_bucket.codepipeline_artifacts_bucket.arn}/*"
+         ]
+    }    
   ]
 }
 EOF
