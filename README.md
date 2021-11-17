@@ -68,11 +68,11 @@ Under this repository, there is a terraform directory containing all the infrast
 
 * Sometimes, AWS Codepipeline fails to pull source code from Github. It seems that this issue is a known one and AWS still doesn't have a resolution for it.
 
-![Github-Token Issue](./issues/github-token-issue.png)
+![Github-Token Issue](./issues/github-token-issue.PNG)
 
 To resolve it, you have to reconnect again to the github repo and set the repository name to `sarwa-go-ecs-app` and branch to `main`.
 
-![Github-Token Issue](./issues/github-token.png)
+![Github-Token Issue](./issues/github-token.PNG)
 
 
 ## References
