@@ -81,9 +81,10 @@ To resolve it, you have to reconnect again to the github repo and set the reposi
     1. Testing stage to Test the code before deploying it.
     2. Notifications to send email/SMS/slack notifications upon success/failure. 
 * Cache the Docker image layers to amazon s3 during building the image for better performance.
-* Use Github Connection V2 instead of V1 (CodeStarConnection) as recommended by AWS
+* Use GitHub Action V2 instead of V1 (CodeStar Connection) as recommended by AWS to get rid of the OAuth apps or personal access tokens needed to access your repository.
 * Adjust the ECS Service configuration by enabling the Auto Scaling feature to adjust the service’s desired count (Scale In/Out).
-* Get rid of the NAT gateways by deploying the ECS services on the public subnets (based on application need) or using VPC PrivateLink Endpoints.
+* Switch to the Blue/Green deployment With CodeDeploy startegy instead of the current Rolling Update one for more control On How to replace application old version with the latest one. 
+* Get rid of the NAT gateways by deploying the ECS services on the public subnets (based on application need) or using VPC PrivateLink Endpoints instead.
 
 ## References
 * [Infrastructure as a code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
