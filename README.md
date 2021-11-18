@@ -76,14 +76,14 @@ To resolve it, you have to reconnect again to the github repo and set the reposi
 
 
 ## Future Iteration
-
-* Create a Multi-AWS account for each environment (e.g DEV, TEST, QA, and PROD) for better isolation and cost monitoring. 
+ 
 * Enhance the pipeline by adding more stages such as the following:
-    1. Testing stage to Test the code before deploying.
-    2. Notifications to send email/SMS/slack notifications upon success/failure.
-* Use Github Connection V2 instead of V1 as recommended by AWS.
+    1. Testing stage to Test the code before deploying it.
+    2. Notifications to send email/SMS/slack notifications upon success/failure. 
 * Cache the Docker image layers to amazon s3 during building the image for better performance.
-* Get rid of the NAT gateways by deploying the ECS services on the public subnets (based on application need) or using VPC PrivateLink Endpoint.
+* Use Github Connection V2 instead of V1 (CodeStarConnection) as recommended by AWS
+* Adjust the ECS Service configuration by enabling the Auto Scaling feature to adjust the service’s desired count (Scale In/Out).
+* Get rid of the NAT gateways by deploying the ECS services on the public subnets (based on application need) or using VPC PrivateLink Endpoints.
 
 ## References
 * [Infrastructure as a code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
